@@ -1,0 +1,77 @@
+﻿@page "/fetchdata"
+@using WUW.MicroManagerWasm.MudBlazorApp.Shared.Prerender
+@inject IWeatherForecastService WeatherForecastService
+@using WUW.MicroManagerWasm.MudBlazorApp.Client.Prerender
+@using WUW.MicroManagerWasm.MudBlazorApp.Shared
+
+@*prerender*@
+@inject PersistentComponentState ApplicationState
+@*prerender*@
+@implements IDisposable 
+
+<PageTitle>Weather forecast</PageTitle>
+
+<MudText Typo="Typo.h3" GutterBottom="true">Weather forecast</MudText>
+<MudText Class="mb-8">This component demonstrates fetching data from the server.</MudText>
+@if (forecasts == null)
+{
+    <MudProgressCircular Color="Color.Default" Indeterminate="true" />
+}
+else
+{
+    <MudTable Items="forecasts" Hover="true" SortLabel="Sort By" Elevation="0">
+        <HeaderContent>
+            <MudTh><MudTableSortLabel InitialDirection="SortDirection.Ascending" SortBy="new Func<WeatherForecast, object>(x=>x.Date)">Date</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<WeatherForecast, object>(x=>x.TemperatureC)">Temp. (C)</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<WeatherForecast, object>(x=>x.TemperatureF)">Temp. (F)</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<WeatherForecast, object>(x=>x.Summary!)">Summary</MudTableSortLabel></MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Date">@context.Date</MudTd>
+            <MudTd DataLabel="Temp. (C)">@context.TemperatureC</MudTd>
+            <MudTd DataLabel="Temp. (F)">@context.TemperatureF</MudTd>
+            <MudTd DataLabel="Summary">@context.Summary</MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager PageSizeOptions="new int[]{50, 100}" />
+        </PagerContent>
+    </MudTable>
+}
+
+
+@code {
+    private WeatherForecast[]? forecasts;
+
+    //prerender
+    private PersistingComponentStateSubscription _subscription;
+
+    protected override async Task OnInitializedAsync()
+    {
+        //original
+        //forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
+
+
+        //prerender
+        _subscription = ApplicationState.RegisterOnPersisting(PersistForecasts);
+
+        //prerender
+        if (ApplicationState.TryTakeFromJson<WeatherForecast[]>("fetchData", out var stored))
+            forecasts = stored;
+        else
+            forecasts = await WeatherForecastService.GetForecastAsync();
+        //forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
+
+    }
+
+    //prerender
+    private Task PersistForecasts()
+    {
+        ApplicationState.PersistAsJson("fetchData", forecasts);
+        return Task.CompletedTask;
+    }
+
+    public void Dispose()
+    {
+        _subscription.Dispose();
+    }
+}

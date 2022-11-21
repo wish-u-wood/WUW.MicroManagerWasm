@@ -1,0 +1,56 @@
+﻿@inherits LayoutComponentBase
+
+<MudThemeProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+    <MudAppBar Elevation="0">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        <MudSpacer />
+        <MudMenu AnchorOrigin="Origin.BottomRight" LockScroll="true" TransformOrigin="Origin.TopRight">
+        <ActivatorContent>
+            <MudIconButton Icon="@Icons.Filled.Person" Color="Color.Inherit" />
+        </ActivatorContent>
+        <ChildContent>
+            <div class="py-2" style="min-width: 220px">
+                @*<PersonCard Class="mt-n2" Style="margin-bottom:0px!important" />
+                <MudMenuItem OnClick="Profile">
+                    <div class="d-flex">
+                        <MudIcon Class="mx-2" Icon="@Icons.Material.Filled.Person" />
+                        <MudText>@L["Account"]</MudText>
+                    </div>
+                </MudMenuItem>*@              
+                <div class="mt-4 mx-4">
+                    @if (UserIsAuthenticated)
+                    {
+                        <MudButton Color="Color.Error" FullWidth="true" StartIcon="@Icons.Material.Filled.Logout" Variant="Variant.Filled">
+                            Logout
+                        </MudButton>
+                    }
+                    else
+                    {
+                        <MudButton Color="Color.Primary" FullWidth="true" StartIcon="@Icons.Material.Filled.Login" Variant="Variant.Filled">
+                            Login
+                        </MudButton>
+                    }
+                </div>
+            </div>
+        </ChildContent>
+    </MudMenu>
+    </MudAppBar>
+    <MudDrawer @bind-Open="_drawerOpen" Elevation="1">
+        <MudDrawerHeader>
+            <MudText Typo="Typo.h6">MudBlazorApp</MudText>
+        </MudDrawerHeader>
+        <NavMenu />
+    </MudDrawer>
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.Large" Class="my-16 pt-16">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+
+
