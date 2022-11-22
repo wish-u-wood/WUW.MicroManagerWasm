@@ -8,7 +8,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>MudBlazorApp</title>
+    <title>Micro-Manager</title>
     <base href="/" />
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
     <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
@@ -16,7 +16,17 @@
 
 <body>
     @*prerender*@
-    <component type="typeof(App)" render-mode="WebAssemblyPrerendered" />
+     <component type="typeof(App)" render-mode="WebAssemblyPrerendered" />
+@*    <div id="app">
+        @if (HttpContext.Request.Path.StartsWithSegments("/login"))
+        {
+            <component type="typeof(App)" render-mode="WebAssembly" />
+        }
+        else
+        {
+            <component type="typeof(App)" render-mode="WebAssemblyPrerendered" />
+        }
+    </div>*@
     <persist-component-state />
 
     <script src="_framework/blazor.webassembly.js"></script>

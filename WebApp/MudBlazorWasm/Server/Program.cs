@@ -1,6 +1,15 @@
-﻿using Microsoft.AspNetCore.Hosting.StaticWebAssets;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Server;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.JSInterop;
 using MudBlazor.Services;
+using WUW.MicroManagerApp.Common.Shared.Authorization;
+using WUW.MicroManagerWasm.MudBlazorApp.Infrastructure;
 using WUW.MicroManagerWasm.MudBlazorApp.Server.Prerender;
 using WUW.MicroManagerWasm.MudBlazorApp.Shared.Prerender;
 
@@ -14,6 +23,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<IWeatherForecastService, WeatherForecastService>();
 builder.Services.AddMudServices();
+
+builder.Services.TryAddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>();
+builder.Services.AddClientServices(builder.Configuration);
 
 var app = builder.Build();
 
@@ -40,7 +52,7 @@ app.UseRouting();
 app.MapRazorPages();
 app.MapControllers();
 
-// app.MapFallbackToFile("index.html");
+//app.MapFallbackToFile("index.html");
 // prerender
 app.MapFallbackToPage("/_Host");
 

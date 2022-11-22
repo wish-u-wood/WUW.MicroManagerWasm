@@ -5,7 +5,7 @@ networks:
 
 services:
   mudblazorapp.server:
-  container_name: mudblazor-wasm
+    container_name: mudblazor-wasm
     image: ${DOCKER_REGISTRY-}mudblazorappserver
     build:
       context: .

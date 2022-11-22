@@ -10,7 +10,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Blazored.LocalStorage" Version="4.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.11" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.11" />
+		<PackageReference Include="Microsoft.Authentication.WebAssembly.Msal" Version="6.0.11" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
+		<PackageReference Include="MudBlazor" Version="6.1.2" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Include="NSwag.MSBuild" Version="13.17.0">
 			<PrivateAssets>all</PrivateAssets>

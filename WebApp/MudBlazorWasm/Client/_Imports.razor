@@ -12,10 +12,16 @@
 @using Microsoft.JSInterop
 
 @using MudBlazor
-@using WUW.MicroManagerWasm.MudBlazorApp.Client
-@using WUW.MicroManagerWasm.MudBlazorApp.Client.Shared
+@using Blazored.LocalStorage
 
+@using WUW.MicroManagerWasm.MudBlazorApp.Client
+@using WUW.MicroManagerWasm.MudBlazorApp.Client.Components;
+@using WUW.MicroManagerWasm.MudBlazorApp.Client.Shared
 @using WUW.MicroManagerWasm.MudBlazorApp.Infrastructure.Authorization.Permissions
 @using WUW.MicroManagerApp.Common.Shared.Authorization
+@using WUW.MicroManagerWasm.MudBlazorApp.Client.Pages.Identity;
 
 @attribute [Authorize]
+
+@inject NavigationManager Navigation
+@inject ISnackbar Snackbar
