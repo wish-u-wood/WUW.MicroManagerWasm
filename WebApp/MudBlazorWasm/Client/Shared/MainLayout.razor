@@ -1,4 +1,8 @@
-﻿@inherits LayoutComponentBase
+﻿@using WUW.MicroManagerWasm.MudBlazorApp.Infrastructure.Authorization
+
+@inherits LayoutComponentBase
+
+@inject IAuthenticationService AuthService
 
 <MudThemeProvider />
 <MudDialogProvider />
@@ -10,39 +14,33 @@
         <MudSpacer />
         <MudMenu AnchorOrigin="Origin.BottomRight" LockScroll="true" TransformOrigin="Origin.TopRight">
             <ActivatorContent>
-                <MudIconButton Icon="@Icons.Filled.Person" Color="Color.Inherit" />
+@*                <MudIconButton Icon="@Icons.Filled.Person" Color="Color.Inherit" OnClick="IsAuthenticated" />
+*@                <MudIconButton Icon="@Icons.Filled.Person" Color="Color.Inherit" />
             </ActivatorContent>
             <ChildContent>
                 <div class="py-2" style="min-width: 320px">
-                    @*<PersonCard Class="mt-n2" Style="margin-bottom:0px!important" />
-                    <MudMenuItem OnClick="Profile">
-                    <div class="d-flex">
-                    <MudIcon Class="mx-2" Icon="@Icons.Material.Filled.Person" />
-                    <MudText>@L["Account"]</MudText>
-                    </div>
-                    </MudMenuItem>*@
-                    <MudMenuItem>
-                        <div class="d-flex">
-                            <MudIcon Class="mx-2" Icon="@Icons.Material.Filled.Person" />
-                            <MudText>Account</MudText>
-                        </div>
-                    </MudMenuItem>
-
                     <div class="ma-4">
-                        @if (UserIsAuthenticated)
-                        {
-                            <MudButton Color="Color.Error" FullWidth="true" StartIcon="@Icons.Material.Filled.Logout" Variant="Variant.Filled">
-                                Logout
-                            </MudButton>
-                        }
-                        else
-                        {
-                            <MudButton Color="Color.Primary" FullWidth="true" StartIcon="@Icons.Material.Filled.Login" Variant="Variant.Filled" Link="/login">
-                                Login
-                            </MudButton>
-                        }
+                        <AuthorizeView>
+                            <Authorized>
+                                <NameCard Class="mt-n2" Style="margin-bottom:0px!important" />
+                                <MudMenuItem>
+                                    <div class="d-flex">
+                                        <MudIcon Class="mx-2" Icon="@Icons.Material.Filled.Person" />
+                                        <MudText>Account</MudText>
+                                    </div>
+                                </MudMenuItem>
+                                <MudButton Color="Color.Error" FullWidth="true" StartIcon="@Icons.Material.Filled.Logout" Variant="Variant.Filled" OnClick="Logout">
+                                    Logout
+                                </MudButton>
+                            </Authorized>
+                            <NotAuthorized>
+                                <MudButton Color="Color.Primary" FullWidth="true" StartIcon="@Icons.Material.Filled.Login" Variant="Variant.Filled" Link="/login">
+                                    Login
+                                </MudButton>
+                            </NotAuthorized>
+                        </AuthorizeView>
                     </div>
-                    <MudDivider Class="mb-4"/>
+                    <MudDivider Class="mb-4" />
                     <div class="d-flex justify-center">
                         <MudLink class="px-2" Href="#" Typo="Typo.caption" Underline="Underline.None">Privacy Policy</MudLink>
                         <MudText>•</MudText>

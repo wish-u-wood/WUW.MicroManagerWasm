@@ -1,15 +1,25 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using MudBlazor;
+using WUW.MicroManagerWasm.MudBlazorApp.Client.Components;
+using static MudBlazor.CategoryTypes;
 
 namespace WUW.MicroManagerWasm.MudBlazorApp.Client.Shared
 {
     public partial class MainLayout
     {
-        [CascadingParameter]
-        protected Task<AuthenticationState> AuthState { get; set; } = default!;
+        //[CascadingParameter]
+        //protected Task<AuthenticationState> AuthState { get; set; } = default!;
 
-        private bool UserIsAuthenticated { get; set; } = false;
+        //private bool UserIsAuthenticated { get; set; } = false;
 
+        //protected override async Task OnAfterRenderAsync(bool firstRender)
+        //{
+        //    if (firstRender)
+        //    {
+        //        await IsAuthenticated();
+        //    }
+        //}
 
         bool _drawerOpen = true;
         void DrawerToggle()
@@ -17,10 +27,16 @@ namespace WUW.MicroManagerWasm.MudBlazorApp.Client.Shared
             _drawerOpen = !_drawerOpen;
         }
 
-        private async Task IsAuthenticated()
+        //private async Task IsAuthenticated()
+        //{
+        //    var user = (await AuthState).User;
+        //    UserIsAuthenticated = user.Identity?.IsAuthenticated == true;
+        //}
+
+        async Task Logout()
         {
-            var user = (await AuthState).User;
-            UserIsAuthenticated = user.Identity?.IsAuthenticated == true;
+            await AuthService.LogoutAsync();
+            Snackbar.Add("Logged out", Severity.Info);
         }
     }
 }
