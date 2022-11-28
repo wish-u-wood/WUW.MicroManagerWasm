@@ -1,0 +1,10 @@
+﻿@if (string.IsNullOrEmpty(this.ImageUri))
+{
+    <MudAvatar Size="Size.Medium" Color="Color.Tertiary" Class="ma-2">
+        @FullName?.ToUpper().FirstOrDefault()
+    </MudAvatar>
+}
+else
+{
+    <MudAvatar Image="@ImageUri" />
+}

@@ -8,6 +8,8 @@ namespace WUW.MicroManagerWasm.MudBlazorApp.Client.Shared
 {
     public partial class MainLayout
     {
+        [Parameter]
+        public RenderFragment ChildContent { get; set; } = default!;
         //[CascadingParameter]
         //protected Task<AuthenticationState> AuthState { get; set; } = default!;
 

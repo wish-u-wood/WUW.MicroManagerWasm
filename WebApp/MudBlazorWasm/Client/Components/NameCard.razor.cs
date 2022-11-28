@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using WUW.MicroManagerApp.Common.Infrastructure.Authorization;
-
 namespace WUW.MicroManagerWasm.MudBlazorApp.Client.Components;
 
 public partial class NameCard
@@ -11,37 +10,10 @@ public partial class NameCard
     [Parameter]
     public string? Style { get; set; }
 
-    [CascadingParameter]
-    protected Task<AuthenticationState> AuthState { get; set; } = default!;
+    private NameCardAvatar? _nameCardAvatar { get; set; }
 
-    private string? UserId { get; set; }
-    private string? Email { get; set; }
-    private string? FullName { get; set; }
-    private string? ImageUri { get; set; }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            await LoadUserData();
-        }
-    }
-
-    private async Task LoadUserData()
-    {
-        var user = (await AuthState).User;
-        if (user.Identity?.IsAuthenticated == true)
-        {
-            if (string.IsNullOrEmpty(UserId))
-            {
-                FullName = user.GetFullName();
-                UserId = user.GetUserId();
-                Email = user.GetEmail();
-                //ImageUri = string.IsNullOrEmpty(user?.GetImageUrl()) ? string.Empty : (Config["ApiBaseUrl"] + user?.GetImageUrl());
-                StateHasChanged();
-            }
-        }
-    }
+    private string? EmailFromAvatar { get; set; }
+    private string? FullNameFromAvatar { get; set; }
 
     private void GoToAccount()
     {

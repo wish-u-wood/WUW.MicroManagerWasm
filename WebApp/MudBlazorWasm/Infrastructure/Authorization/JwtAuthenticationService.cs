@@ -8,32 +8,24 @@ using WUW.MicroManagerWasm.MudBlazorApp.Infrastructure.Common;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using WUW.MicroManagerApp.Common.Infrastructure.Authorization;
-using static System.Net.WebRequestMethods;
-using System.Net.Http.Headers;
+
 
 namespace WUW.MicroManagerWasm.MudBlazorApp.Infrastructure.Authorization;
-//public class JwtAuthenticationService : AuthenticationStateProvider, IAuthenticationService, IAccessTokenProvider
-public class JwtAuthenticationService : AuthenticationStateProvider, IAuthenticationService
+public class JwtAuthenticationService : AuthenticationStateProvider, IAuthenticationService, IAccessTokenProvider
 {
     private readonly SemaphoreSlim _semaphore = new(1, 1);
 
     private readonly ILocalStorageService _localStorage;
     private readonly ITokensClient _tokensClient;
-    //private readonly IPersonalClient _personalClient;
+    private readonly IProfileClient _profileClient;
     private readonly NavigationManager _navigation;
 
     public AuthProvider ProviderType => AuthProvider.Jwt;
 
-    //public JwtAuthenticationService(ILocalStorageService localStorage, IPersonalClient personalClient, ITokensClient tokensClient, NavigationManager navigation)
-    //{
-    //    _localStorage = localStorage;
-    //    _personalClient = personalClient;
-    //    _tokensClient = tokensClient;
-    //    _navigation = navigation;
-    //}
-    public JwtAuthenticationService(ILocalStorageService localStorage, ITokensClient tokensClient, NavigationManager navigation)
+    public JwtAuthenticationService(ILocalStorageService localStorage, IProfileClient profileClient, ITokensClient tokensClient, NavigationManager navigation)
     {
         _localStorage = localStorage;
+        _profileClient = profileClient;
         _tokensClient = tokensClient;
         _navigation = navigation;
     }
@@ -83,8 +75,8 @@ public class JwtAuthenticationService : AuthenticationStateProvider, IAuthentica
         await CacheAuthTokens(token, refreshToken);
 
         // Get permissions for the current user and add them to the cache
-        //var permissions = await _personalClient.GetPermissionsAsync();
-        //await CachePermissions(permissions);
+        var permissions = await _profileClient.GetProfilePermissionsAsync();
+        await CachePermissions(permissions);
 
         NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
 
